@@ -25,6 +25,7 @@ gulp.task('css', function () {
     return gulp.src([
         //all the libs
         'node_modules/normalize.css/normalize.css',
+        'node_modules/slick-carousel/slick/slick.css'
     ])
         .pipe(concat('_libs.scss'))
         .pipe(gulp.dest('app/scss/'))
@@ -36,15 +37,26 @@ gulp.task('html', function () {
        .pipe(browserSync.reload({stream: true}))
 });
 
-gulp.task('js', function () {
-   return gulp.src('app/js/main.js')
-       .pipe(uglify())
-       .pipe(rename({
-           suffix: '.min'
-       }))
-       .pipe(gulp.dest('app/js/'))
-       .pipe(browserSync.reload({stream: true}))
+gulp.task('js', function(){
+    return gulp.src([
+        'node_modules/slick-carousel/slick/slick.js'
+    ])
+        .pipe(concat('libs.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('app/js'))
+        .pipe(browserSync.reload({stream: true}))
 });
+
+gulp.task('script', function(){
+    return gulp.src('app/js/main.js')
+        .pipe(uglify())
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest('app/js'))
+        .pipe(browserSync.reload({stream: true}))
+});
+
 
 gulp.task('browser-sync', function() {
    browserSync.init({
@@ -57,13 +69,13 @@ gulp.task('browser-sync', function() {
 gulp.task('watch', function () {
    gulp.watch('app/scss/**/*.scss', gulp.parallel('scss'));
    gulp.watch('app/**/*.html', gulp.parallel('html'));
-   gulp.watch('app/js/**/*.js', gulp.parallel('js'))
+   gulp.watch('app/js/*.js', gulp.parallel('script'))
 });
 
 gulp.task('export', function () {
     let buildHtml = gulp.src('app/**/*.html')
         .pipe(gulp.dest('dist'));
-    let buildCss  = gulp.src('app/css/**/*.min.css')
+    let buildCss  = gulp.src('app/css/**/*.css')
         .pipe(gulp.dest('dist/css'));
     let buildJs  = gulp.src('app/js/**/*.min.js')
         .pipe(gulp.dest('dist/js'));
