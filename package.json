@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Vadim Prokopchuk",
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.26.5",
