@@ -3,5 +3,10 @@
   "version": "1.0.0",
   "description": "start gulp",
   "main": "index.js",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^4.1.0"
+  }
 }
