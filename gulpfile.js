@@ -126,3 +126,50 @@ exports.styles = styles
 exports.watchFiles = watchFiles
 
 exports.default = series(clean, parallel(htmlInclude, scripts, fonts, imgToDist, svgSprites), styles, watchFiles)
+
+const stylesBuild = () => {
+    return src('./src/scss/**/*.scss')
+        .pipe(scss({
+            outputStyle: 'expanded'
+        }).on('error', notify.onError()))
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(autoprefixer({
+            cascade: false,
+        }))
+        .pipe(cleanCSS({
+            level: 2
+        }))
+        .pipe(dest('./dist/css/'))
+}
+
+const scriptsBuild = () => {
+    return src('./src/js/index.js')
+        .pipe(webpackStream({
+            mode: 'development',
+            output: {
+                filename: 'index.js',
+            },
+            module: {
+                rules: [{
+                    test: /\.m?js$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-env']
+                        }
+                    }
+                }]
+            },
+        }))
+        .on('error', function (err) {
+            console.error('WEBPACK ERROR', err);
+            this.emit('end');
+        })
+        .pipe(uglify().on("error", notify.onError()))
+        .pipe(dest('./dist/js'))
+}
+
+exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, imgToDist, svgSprites), stylesBuild);
