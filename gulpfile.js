@@ -11,6 +11,8 @@ const svgSprite = require('gulp-svg-sprite')
 const ttf2woff = require('gulp-ttf2woff')
 const ttf2woff2 = require('gulp-ttf2woff2')
 const del = require('del')
+const webpackStream = require('webpack-stream')
+const uglify = require('gulp-uglify-es').default
 
 const clean = () => (
     del(['./dist'])
@@ -24,6 +26,38 @@ const fonts = () => {
     return src('./src/fonts/**.ttf')
         .pipe(ttf2woff2())
         .pipe(dest('./dist/fonts'))
+}
+
+const scripts = () => {
+    return src('./src/js/index.js')
+        .pipe(webpackStream({
+            mode: 'development',
+            output: {
+                filename: 'index.js',
+            },
+            module: {
+                rules: [{
+                    test: /\.m?js$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-env']
+                        }
+                    }
+                }]
+            },
+        }))
+        .on('error', function (err) {
+            console.error('WEBPACK ERROR', err);
+            this.emit('end');
+        })
+
+        .pipe(sourcemaps.init())
+        .pipe(uglify().on("error", notify.onError()))
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest('./dist/js'))
+        .pipe(browserSync.stream());
 }
 
 const svgSprites = () => (
@@ -85,9 +119,10 @@ const watchFiles = () => {
     watch(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png'], imgToDist)
     watch(['./src/img/**.svg'], svgSprites)
     watch(['./src/fonts/**.ttf'], fonts)
+    watch('./src/js/**/*.js', scripts)
 }
 
 exports.styles = styles
 exports.watchFiles = watchFiles
 
-exports.default = series(clean, parallel(htmlInclude, fonts, imgToDist, svgSprites), styles, watchFiles)
+exports.default = series(clean, parallel(htmlInclude, scripts, fonts, imgToDist, svgSprites), styles, watchFiles)
