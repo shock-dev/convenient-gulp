@@ -1,4 +1,4 @@
-const { src, dest, watch, series } = require('gulp')
+const { src, dest, watch, series, parallel } = require('gulp')
 const scss = require('gulp-sass')
 const notify = require('gulp-notify')
 const sourcemaps = require('gulp-sourcemaps')
@@ -10,6 +10,11 @@ const fileinclude = require('gulp-file-include')
 const svgSprite = require('gulp-svg-sprite')
 const ttf2woff = require('gulp-ttf2woff')
 const ttf2woff2 = require('gulp-ttf2woff2')
+const del = require('del')
+
+const clean = () => (
+    del(['./dist'])
+)
 
 const fonts = () => {
     src('./src/fonts/**.ttf')
@@ -85,4 +90,4 @@ const watchFiles = () => {
 exports.styles = styles
 exports.watchFiles = watchFiles
 
-exports.default = series(htmlInclude, fonts, styles, imgToDist, svgSprites, watchFiles)
+exports.default = series(clean, parallel(htmlInclude, fonts, imgToDist, svgSprites), styles, watchFiles)
