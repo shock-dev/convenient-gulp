@@ -28,6 +28,11 @@ const styles = () => (
         .pipe(browserSync.stream())
 )
 
+const imgToDist = () => (
+    src(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png'])
+        .pipe(dest('./dist/img'))
+)
+
 const htmlInclude = () => (
     src('./src/index.html')
         .pipe(fileinclude({
@@ -47,9 +52,10 @@ const watchFiles = () => {
 
     watch('./src/scss/**/*.scss', styles)
     watch('./src/index.html', htmlInclude)
+    watch(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png'], imgToDist)
 }
 
 exports.styles = styles
 exports.watchFiles = watchFiles
 
-exports.default = series(htmlInclude, styles, watchFiles)
+exports.default = series(htmlInclude, styles, imgToDist, watchFiles)
