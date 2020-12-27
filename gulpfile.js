@@ -7,6 +7,19 @@ const autoprefixer = require('gulp-autoprefixer')
 const cleanCSS = require('gulp-clean-css')
 const browserSync = require('browser-sync').create()
 const fileinclude = require('gulp-file-include')
+const svgSprite = require('gulp-svg-sprite')
+
+const svgSprites = () => (
+    src(['./src/img/**.svg'])
+        .pipe(svgSprite({
+            mode: {
+                stack: {
+                    sprite: '../sprite.svg'
+                }
+            }
+        }))
+        .pipe(dest('./dist/img'))
+)
 
 const styles = () => (
     src('./src/scss/index.scss')
@@ -53,9 +66,10 @@ const watchFiles = () => {
     watch('./src/scss/**/*.scss', styles)
     watch('./src/index.html', htmlInclude)
     watch(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png'], imgToDist)
+    watch(['./src/img/**.svg'], svgSprites)
 }
 
 exports.styles = styles
 exports.watchFiles = watchFiles
 
-exports.default = series(htmlInclude, styles, imgToDist, watchFiles)
+exports.default = series(htmlInclude, styles, imgToDist, svgSprites, watchFiles)
