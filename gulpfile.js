@@ -1,4 +1,4 @@
-const { src, dest, watch, parallel } = require('gulp')
+const { src, dest, watch, parallel, series } = require('gulp')
 const scss = require('gulp-sass')
 const notify = require('gulp-notify')
 const sourcemaps = require('gulp-sourcemaps')
@@ -51,3 +51,5 @@ const watchFiles = () => {
 
 exports.styles = styles
 exports.watchFiles = watchFiles
+
+exports.default = series(htmlInclude, styles, watchFiles)
