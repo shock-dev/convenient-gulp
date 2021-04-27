@@ -1,12 +1,12 @@
 const { src, dest, watch, series, parallel } = require('gulp')
-const scss = require('gulp-sass')
+const scss = require('gulp-dart-sass')
 const notify = require('gulp-notify')
 const sourcemaps = require('gulp-sourcemaps')
 const rename = require('gulp-rename')
 const autoprefixer = require('gulp-autoprefixer')
 const cleanCSS = require('gulp-clean-css')
 const browserSync = require('browser-sync').create()
-const fileinclude = require('gulp-file-include')
+const fileInclude = require('gulp-file-include')
 const svgSprite = require('gulp-svg-sprite')
 const ttf2woff = require('gulp-ttf2woff')
 const ttf2woff2 = require('gulp-ttf2woff2')
@@ -99,7 +99,7 @@ const imgToDist = () => (
 
 const htmlInclude = () => (
     src('./src/index.html')
-        .pipe(fileinclude({
+        .pipe(fileInclude({
             prefix: '@',
             basepath: '@file'
         }))
