@@ -7,16 +7,13 @@ const autoprefixer = require('gulp-autoprefixer')
 const cleanCSS = require('gulp-clean-css')
 const browserSync = require('browser-sync').create()
 const fileInclude = require('gulp-file-include')
-const svgSprite = require('gulp-svg-sprite')
 const ttf2woff = require('gulp-ttf2woff')
 const ttf2woff2 = require('gulp-ttf2woff2')
 const del = require('del')
 const webpackStream = require('webpack-stream')
 const uglify = require('gulp-uglify-es').default
 
-const clean = () => (
-    del(['./dist'])
-)
+const clean = () => del(['./dist'])
 
 const fonts = () => {
     src('./src/fonts/**.ttf')
@@ -60,18 +57,6 @@ const scripts = () => {
         .pipe(browserSync.stream());
 }
 
-const svgSprites = () => (
-    src(['./src/img/**.svg'])
-        .pipe(svgSprite({
-            mode: {
-                stack: {
-                    sprite: '../sprite.svg'
-                }
-            }
-        }))
-        .pipe(dest('./dist/img'))
-)
-
 const styles = () => (
     src('./src/scss/index.scss')
         .pipe(sourcemaps.init())
@@ -93,7 +78,7 @@ const styles = () => (
 )
 
 const imgToDist = () => (
-    src(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png'])
+    src(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png', './src/img/**.svg'])
         .pipe(dest('./dist/img'))
 )
 
@@ -116,8 +101,7 @@ const watchFiles = () => {
 
     watch('./src/scss/**/*.scss', styles)
     watch('./src/index.html', htmlInclude)
-    watch(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png'], imgToDist)
-    watch(['./src/img/**.svg'], svgSprites)
+    watch(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png', './src/img/**.svg'], imgToDist)
     watch(['./src/fonts/**.ttf'], fonts)
     watch('./src/js/**/*.js', scripts)
 }
@@ -125,7 +109,7 @@ const watchFiles = () => {
 exports.styles = styles
 exports.watchFiles = watchFiles
 
-exports.default = series(clean, parallel(htmlInclude, scripts, fonts, imgToDist, svgSprites), styles, watchFiles)
+exports.default = series(clean, parallel(htmlInclude, scripts, fonts, imgToDist), styles, watchFiles)
 
 const stylesBuild = () => {
     return src('./src/scss/**/*.scss')
@@ -172,4 +156,4 @@ const scriptsBuild = () => {
         .pipe(dest('./dist/js'))
 }
 
-exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, imgToDist, svgSprites), stylesBuild);
+exports.build = series(clean, parallel(htmlInclude, scriptsBuild, fonts, imgToDist), stylesBuild);
