@@ -5,13 +5,13 @@
   "main": "index.js",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.13.16",
-    "@babel/preset-env": "^7.13.15",
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
     "babel-loader": "^8.2.2",
-    "browser-sync": "^2.26.14",
+    "browser-sync": "^2.27.4",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
+    "gulp-autoprefixer": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-dart-sass": "^1.0.2",
@@ -22,7 +22,7 @@
     "gulp-ttf2woff": "^1.1.1",
     "gulp-ttf2woff2": "^4.0.1",
     "gulp-uglify-es": "^2.0.0",
-    "webpack": "^5.36.0",
+    "webpack": "^5.43.0",
     "webpack-stream": "^6.1.2"
   },
   "dependencies": {
