@@ -78,7 +78,7 @@ const styles = () => (
 )
 
 const imgToDist = () => (
-    src(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png', './src/img/**.svg'])
+    src(['./src/img/**/*.jpg', './src/img/**/*.jpeg', './src/img/**/*.png', './src/img/**/*.svg'])
         .pipe(dest('./dist/img'))
 )
 
@@ -101,7 +101,7 @@ const watchFiles = () => {
 
     watch('./src/scss/**/*.scss', styles)
     watch('./src/index.html', htmlInclude)
-    watch(['./src/img/**.jpg', './src/img/**.jpeg', './src/img/**.png', './src/img/**.svg'], imgToDist)
+    watch(['./src/img/**/*.jpg', './src/img/**/*.jpeg', './src/img/**/*.png', './src/img/**/*.svg'], imgToDist)
     watch(['./src/fonts/**.ttf'], fonts)
     watch('./src/js/**/*.js', scripts)
 }
